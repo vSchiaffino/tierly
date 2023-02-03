@@ -7,6 +7,6 @@ interface Props {
 
 export const Heading: React.FC<Props> = ({ text, className = '' }) => {
   return (
-    <h2 className={`text-4xl text-slate-900 font-bold ${className}`}>{text}</h2>
+    <h2 className={`text-5xl text-slate-900 font-bold ${className}`}>{text}</h2>
   )
 }
