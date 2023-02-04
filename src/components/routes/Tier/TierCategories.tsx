@@ -91,7 +91,7 @@ export const TierCategories: React.FC<Props> = () => {
   )
   return (
     <Card className="p-10">
-      <div className="mb-8 flex flex-row gap-10">
+      <div className="mb-10 flex flex-row gap-10">
         <button className="py-4 bg-slate-800 text-gray-100 rounded-md shadow-sm w-40 font-semibold text-lg hover:-translate-y-1 transition-transform duration-500">
           Save
         </button>
