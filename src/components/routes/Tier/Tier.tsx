@@ -19,26 +19,31 @@ export const Tier = () => {
         id: 1,
         title: 'Love',
         color: 'red-500',
+        images: [],
       },
       {
         id: 2,
         title: 'Like',
         color: 'orange-500',
+        images: [],
       },
       {
         id: 3,
         title: 'Neutral',
         color: 'orange-200',
+        images: [],
       },
       {
         id: 4,
         title: 'Dislike',
         color: 'yellow-500',
+        images: [],
       },
       {
         id: 5,
         title: 'Hate',
         color: 'green-500',
+        images: [],
       },
     ],
   }

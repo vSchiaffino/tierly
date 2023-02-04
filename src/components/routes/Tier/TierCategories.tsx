@@ -3,49 +3,120 @@ import { Category } from '../../../types/tier'
 import { Card } from '../../Card'
 import { TierCategory } from './TierCategory'
 import { TierModal } from './TierModal'
+import TierImages from './TierImages'
 
 interface Props {
   categories: Category[]
 }
 
 export const TierCategories: React.FC<Props> = () => {
-  const initialValue = [
+  const initialValue: Category[] = [
     {
       id: 1,
       title: 'Love',
       color: 'red-500',
+      images: [],
     },
     {
       id: 2,
       title: 'Like',
       color: 'orange-500',
+      images: [],
     },
     {
       id: 3,
       title: 'Neutral',
       color: 'orange-200',
+      images: [],
     },
     {
       id: 4,
       title: 'Dislike',
       color: 'yellow-500',
+      images: [],
     },
     {
       id: 5,
       title: 'Hate',
       color: 'green-500',
+      images: [],
     },
   ]
+  const initialImages = [
+    {
+      id: 1,
+      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/1200px-fulhamfcshieldsvgpng',
+    },
+    {
+      id: 2,
+      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/1png',
+    },
+    {
+      id: 3,
+      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/2png',
+    },
+    {
+      id: 4,
+      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/afcbournemouth2013svgpng',
+    },
+    {
+      id: 5,
+      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/crystalpalacepng',
+    },
+    {
+      id: 6,
+      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/defdpng',
+    },
+    {
+      id: 7,
+      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/dezeeneverton-fc-new-badge1ajpg',
+    },
+    {
+      id: 8,
+      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/downloadjpg',
+    },
+    {
+      id: 9,
+      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/downloadpng',
+    },
+  ]
+  const [images, setImages] = useState(initialImages)
   const [categories, setCategories] = useState(initialValue)
   const [idEditing, setIdEditing] = useState<number | null>(null)
+  const [draggingOn, setDraggingOn] = useState<Category | null>(null)
   const open = idEditing !== null
+  const onStopDraging = (id: number) => {
+    if (draggingOn !== null) {
+      const editedCategoryIndex = categories.findIndex(
+        (category) => category.id === draggingOn.id
+      )
+      let newCategories = [...categories]
+      const image = images.find((image) => image.id === id)
+      if (!image) return
+      newCategories[editedCategoryIndex] = {
+        ...draggingOn,
+        images: [...draggingOn.images, image],
+      }
+      setCategories(newCategories)
+      setImages(images.filter((image) => image.id !== id))
+    }
+  }
+
+  const onDragOver = (category: Category | null) => {
+    if (draggingOn !== category) setDraggingOn(category)
+  }
   const onModalClose = (color: string, title: string) => {
     setIdEditing(null)
     const editedCategoryIndex = categories.findIndex(
       (category) => category.id === idEditing
     )
     let newCategories = [...categories]
-    newCategories[editedCategoryIndex] = { color, title, id: idEditing || 1 }
+    newCategories[editedCategoryIndex] = {
+      color,
+      title,
+      id: idEditing || 1,
+      images: [],
+    }
     setCategories(newCategories)
   }
   const onCategoryDelete = () => {
@@ -78,6 +149,7 @@ export const TierCategories: React.FC<Props> = () => {
       id: newId,
       title: 'New category',
       color: 'blue-500',
+      images: [],
     }
     setCategories([...categories, newCategory])
     setIdEditing(newId)
@@ -114,12 +186,14 @@ export const TierCategories: React.FC<Props> = () => {
         <TierCategory
           category={category}
           key={category.title}
+          onDragOver={onDragOver}
           onMove={onCategoryMove}
           openModal={() => onModalOpen(category.id)}
           showToDown={index !== categories.length - 1}
           showToUp={index !== 0}
         />
       ))}
+      <TierImages images={images} onStopDraging={onStopDraging} />
     </Card>
   )
 }

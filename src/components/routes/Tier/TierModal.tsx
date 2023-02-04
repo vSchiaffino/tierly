@@ -31,7 +31,6 @@ export const TierModal: React.FC<Props> = ({
   ]
   const [color, setColor] = React.useState('')
   const [title, setTitle] = React.useState('')
-  console.log(color)
   return (
     <Modal
       title="Changing tier category"

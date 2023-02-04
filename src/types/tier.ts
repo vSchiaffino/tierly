@@ -16,4 +16,5 @@ export interface Category {
   id: number
   title: string
   color: string
+  images: { id: number; src: string }[]
 }

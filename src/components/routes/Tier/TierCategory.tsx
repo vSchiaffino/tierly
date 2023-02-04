@@ -5,19 +5,25 @@ interface Props {
   category: Category
   showToUp: boolean
   showToDown: boolean
+  onDragOver: (category: Category | null) => void
   onMove: (id: number, direction: 'up' | 'down') => void
   openModal: () => void
 }
 
 export const TierCategory: React.FC<Props> = ({
   category,
+  onDragOver,
   onMove,
   openModal,
   showToDown,
   showToUp,
 }) => {
   return (
-    <div className={`flex flex-row h-24 border border-gray-900`}>
+    <div
+      className={`flex flex-row min-h-[5rem] border border-gray-900`}
+      onDragLeave={() => onDragOver(null)}
+      onDragOver={() => onDragOver(category)}
+    >
       <div
         className={`text-center justify-center text-lg font-semibold text-slate-900  items-center flex md:w-32 w-24 bg-${category.color}`}
       >
@@ -25,8 +31,18 @@ export const TierCategory: React.FC<Props> = ({
           {category.title}
         </p>
       </div>
-      <div className="flex-grow images bg-slate-800">
-        ACA IRIAN LAS IMAGENES
+      <div className="flex-grow bg-slate-800">
+        <ul className="grid grid-cols-[repeat(auto-fill,5rem)] grid-rows-[repeat(auto-fill,5rem)] gap-2 ">
+          {category.images.map((image) => (
+            <li key={image.id} className="h-20 w-20">
+              <img
+                className="aspect-square object-cover cursor-pointer"
+                src={image.src}
+                alt={'draggable'}
+              />
+            </li>
+          ))}
+        </ul>
       </div>
       <div className="bg-gray-900 md:w-24 w-20 items-center flex justify-between px-2">
         <div>
