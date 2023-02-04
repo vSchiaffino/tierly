@@ -10,7 +10,6 @@ interface Props {
   images: TierImage[]
   onDragOver: (category: Category | null) => void
   onStopDraging: (id: number) => void
-  onCategoryMove: (id: number, direction: 'up' | 'down') => void
 }
 
 export const TierCategoriesView: React.FC<Props> = ({
@@ -18,9 +17,8 @@ export const TierCategoriesView: React.FC<Props> = ({
   images,
   onStopDraging,
   onDragOver,
-  onCategoryMove,
 }) => {
-  const { onCreateCategory } = React.useContext(TierContext)
+  const { onCreateCategory, onCategoryMove } = React.useContext(TierContext)
   return (
     <Card className="p-10">
       <div className="mb-10 flex flex-row gap-10">

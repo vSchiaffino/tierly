@@ -59,9 +59,9 @@ export const TierCategories: React.FC<Props> = () => {
   }
 
   const onCreateCategory = () => {
-    const newId = categories.length + 1
+    const id = categories.length + 1
     const newCategory = {
-      id: newId,
+      id,
       title: 'New category',
       color: 'blue-500',
       images: [],
@@ -88,6 +88,7 @@ export const TierCategories: React.FC<Props> = () => {
     <TierContext.Provider
       value={{
         editingCategory,
+        onCategoryMove,
         onUpdateEditingCategory,
         onDeleteEditingCategory,
         onCreateCategory,
@@ -98,7 +99,6 @@ export const TierCategories: React.FC<Props> = () => {
       <TierCategoriesView
         categories={categories}
         images={images}
-        onCategoryMove={onCategoryMove}
         onDragOver={onDragOver}
         onStopDraging={onStopDraging}
       />
