@@ -3,7 +3,6 @@ import { Category } from '../../../types/tier'
 import { Card } from '../../Card'
 import { TierCategory } from './TierCategory'
 import { TierModal } from './TierModal'
-import { CLIENT_RENEG_LIMIT } from 'tls'
 
 interface Props {
   categories: Category[]
