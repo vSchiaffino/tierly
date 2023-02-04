@@ -1,6 +1,7 @@
 import React from 'react'
 import { TierDetail } from '../../../types/tier'
 import { Heading } from '../../Heading'
+import { Card } from '../../Card'
 
 interface Props {
   tier: TierDetail
@@ -9,7 +10,10 @@ interface Props {
 export const TierInfo: React.FC<Props> = ({ tier }) => {
   const { title, description, imageUrl } = tier
   return (
-    <main className="grid gap-10 lg:grid-cols-[1fr_auto] grid-cols-1 my-10 bg-slate-100 rounded-md p-10 shadow-sm">
+    <Card
+      as="main"
+      className="grid gap-10 lg:grid-cols-[1fr_auto] grid-cols-1 my-10 p-10"
+    >
       <div className="flex flex-col gap-5">
         <Heading text={title} />
         <p className="text-lg text-slate-800">{description}</p>
@@ -19,6 +23,6 @@ export const TierInfo: React.FC<Props> = ({ tier }) => {
         alt={`Tier of ${title}`}
         className="mx-auto object-cover aspect-square flex-col"
       />
-    </main>
+    </Card>
   )
 }
