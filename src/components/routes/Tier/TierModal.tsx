@@ -1,12 +1,12 @@
 import React from 'react'
 import { Modal } from '../../Modal'
 import { useEffect } from 'react'
-import { CLIENT_RENEG_LIMIT } from 'tls'
 
 interface Props {
   open: boolean
   initialColor: string
   initialTitle: string
+  onDelete: () => void
   onClose: (color: string, title: string) => void
 }
 
@@ -14,6 +14,7 @@ export const TierModal: React.FC<Props> = ({
   open,
   initialColor,
   initialTitle,
+  onDelete,
   onClose,
 }) => {
   useEffect(() => {
@@ -28,9 +29,6 @@ export const TierModal: React.FC<Props> = ({
     'bg-orange-500',
     'bg-orange-200',
   ]
-  const onDelete = () => {
-    // todo delete
-  }
   const [color, setColor] = React.useState('')
   const [title, setTitle] = React.useState('')
   console.log(color)
@@ -46,6 +44,7 @@ export const TierModal: React.FC<Props> = ({
             Title:
           </label>
           <input
+            maxLength={40}
             className="border-2 p-4 rounded-md w-[50%]"
             type="text"
             value={title}
@@ -57,6 +56,7 @@ export const TierModal: React.FC<Props> = ({
           <div className="mt-4 flex flex-row gap-5">
             {colors.map((_color) => (
               <div
+                key={_color}
                 onClick={() => setColor(_color.substring(3))}
                 className={`hover:scale-125 hover:brightness-110 transition-all duration-200 cursor-pointer w-10 h-10 ${_color} rounded-full box-border border-slate-800 ${
                   'bg-' + color === _color ? 'border-4' : ''

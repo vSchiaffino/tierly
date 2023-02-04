@@ -3,6 +3,7 @@ import { Category } from '../../../types/tier'
 import { Card } from '../../Card'
 import { TierCategory } from './TierCategory'
 import { TierModal } from './TierModal'
+import { CLIENT_RENEG_LIMIT } from 'tls'
 
 interface Props {
   categories: Category[]
@@ -48,6 +49,28 @@ export const TierCategories: React.FC<Props> = () => {
     newCategories[editedCategoryIndex] = { color, title, id: idEditing || 1 }
     setCategories(newCategories)
   }
+  const onEditingCategoryDelete = () => {
+    console.log('bye', idEditing)
+    setIdEditing(null)
+    const editedCategoryIndex = categories.findIndex(
+      (category) => category.id === idEditing
+    )
+    let newCategories = [...categories]
+    newCategories.splice(editedCategoryIndex, 1)
+    setCategories(newCategories)
+  }
+
+  const onCreateCategory = () => {
+    const newId = categories.length + 1
+    const newCategory = {
+      id: newId,
+      title: 'New category',
+      color: 'blue-500',
+    }
+    setCategories([...categories, newCategory])
+    setIdEditing(newId)
+  }
+
   const onModalOpen = (id: number) => {
     setIdEditing(id)
   }
@@ -56,8 +79,21 @@ export const TierCategories: React.FC<Props> = () => {
   )
   return (
     <Card className="p-10">
+      <div className="mb-8 flex flex-row gap-10">
+        <button className="py-4 bg-slate-800 text-gray-100 rounded-md shadow-sm w-40 font-semibold text-lg hover:-translate-y-1 transition-transform duration-500">
+          Save
+        </button>
+        <button
+          onClick={onCreateCategory}
+          className="w-40 py-4 text-lg font-semibold border-slate-800 border-2 text-slate-800 rounded-md shadow-md hover:-translate-y-1  transition-transform duration-500"
+        >
+          Add category
+        </button>
+      </div>
+
       <TierModal
         open={open}
+        onDelete={onEditingCategoryDelete}
         onClose={onModalClose}
         initialColor={selectedCategory?.color || ''}
         initialTitle={selectedCategory?.title || ''}

@@ -10,9 +10,11 @@ export const TierCategory: React.FC<Props> = ({ category, openModal }) => {
   return (
     <div className={`flex flex-row h-24 border border-gray-900`}>
       <div
-        className={`justify-center text-lg font-semibold text-slate-900  items-center flex md:w-32 w-24 bg-${category.color}`}
+        className={`text-center justify-center text-lg font-semibold text-slate-900  items-center flex md:w-32 w-24 bg-${category.color}`}
       >
-        {category.title}
+        <p className="px-2 inline-block w-full align-middle break-words">
+          {category.title}
+        </p>
       </div>
       <div className="flex-grow images bg-slate-800">
         ACA IRIAN LAS IMAGENES
