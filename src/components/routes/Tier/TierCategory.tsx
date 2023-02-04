@@ -3,10 +3,19 @@ import { Category } from '../../../types/tier'
 
 interface Props {
   category: Category
+  showToUp: boolean
+  showToDown: boolean
+  onMove: (id: number, direction: 'up' | 'down') => void
   openModal: () => void
 }
 
-export const TierCategory: React.FC<Props> = ({ category, openModal }) => {
+export const TierCategory: React.FC<Props> = ({
+  category,
+  onMove,
+  openModal,
+  showToDown,
+  showToUp,
+}) => {
   return (
     <div className={`flex flex-row h-24 border border-gray-900`}>
       <div
@@ -29,16 +38,22 @@ export const TierCategory: React.FC<Props> = ({ category, openModal }) => {
           />
         </div>
         <div>
-          <img
-            alt="Move up"
-            className="cursor-pointer hover:bg-gray-500 rounded-full transition duration-400"
-            src="https://tiermaker.com/images/chart/chart/arrowup.png"
-          />
-          <img
-            alt="Move down"
-            className="cursor-pointer hover:bg-gray-500 rounded-full transition duration-400"
-            src="https://tiermaker.com/images/chart/chart/arrowdown.png"
-          />
+          {showToUp && (
+            <img
+              onClick={() => onMove(category.id, 'up')}
+              alt="Move up"
+              className="cursor-pointer hover:bg-gray-500 rounded-full transition duration-400"
+              src="https://tiermaker.com/images/chart/chart/arrowup.png"
+            />
+          )}
+          {showToDown && (
+            <img
+              onClick={() => onMove(category.id, 'down')}
+              alt="Move down"
+              className="cursor-pointer hover:bg-gray-500 rounded-full transition duration-400"
+              src="https://tiermaker.com/images/chart/chart/arrowdown.png"
+            />
+          )}
         </div>
       </div>
     </div>

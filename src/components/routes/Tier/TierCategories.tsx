@@ -48,14 +48,27 @@ export const TierCategories: React.FC<Props> = () => {
     newCategories[editedCategoryIndex] = { color, title, id: idEditing || 1 }
     setCategories(newCategories)
   }
-  const onEditingCategoryDelete = () => {
-    console.log('bye', idEditing)
-    setIdEditing(null)
+  const onCategoryDelete = () => {
+    // Deletes the current editing category
     const editedCategoryIndex = categories.findIndex(
       (category) => category.id === idEditing
     )
     let newCategories = [...categories]
     newCategories.splice(editedCategoryIndex, 1)
+    setIdEditing(null)
+    setCategories(newCategories)
+  }
+
+  const onCategoryMove = (id: number, direction: 'up' | 'down') => {
+    const editedCategoryIndex = categories.findIndex(
+      (category) => category.id === id
+    )
+    let newCategories = [...categories]
+    const modifier = direction === 'up' ? -1 : 1
+    const otherCategoryToMoveIndex = editedCategoryIndex + modifier
+    const otherCategoryToMove = newCategories[otherCategoryToMoveIndex]
+    newCategories[otherCategoryToMoveIndex] = newCategories[editedCategoryIndex]
+    newCategories[editedCategoryIndex] = otherCategoryToMove
     setCategories(newCategories)
   }
 
@@ -92,16 +105,19 @@ export const TierCategories: React.FC<Props> = () => {
 
       <TierModal
         open={open}
-        onDelete={onEditingCategoryDelete}
+        onDelete={onCategoryDelete}
         onClose={onModalClose}
         initialColor={selectedCategory?.color || ''}
         initialTitle={selectedCategory?.title || ''}
       />
-      {categories.map((category) => (
+      {categories.map((category, index) => (
         <TierCategory
           category={category}
           key={category.title}
+          onMove={onCategoryMove}
           openModal={() => onModalOpen(category.id)}
+          showToDown={index !== categories.length - 1}
+          showToUp={index !== 0}
         />
       ))}
     </Card>

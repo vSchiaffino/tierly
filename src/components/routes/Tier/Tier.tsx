@@ -16,22 +16,27 @@ export const Tier = () => {
       'What is the best Premier League Club? What Club is your favorite? Who do you hate?',
     categories: [
       {
+        id: 1,
         title: 'Love',
         color: 'red-500',
       },
       {
+        id: 2,
         title: 'Like',
         color: 'orange-500',
       },
       {
+        id: 3,
         title: 'Neutral',
         color: 'orange-200',
       },
       {
+        id: 4,
         title: 'Dislike',
         color: 'yellow-500',
       },
       {
+        id: 5,
         title: 'Hate',
         color: 'green-500',
       },

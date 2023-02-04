@@ -13,6 +13,7 @@ export interface TierDetail extends Tier {
 }
 
 export interface Category {
+  id: number
   title: string
   color: string
 }
