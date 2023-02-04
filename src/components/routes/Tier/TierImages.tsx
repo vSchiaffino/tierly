@@ -8,7 +8,7 @@ interface Props {
 
 const TierImages: React.FC<Props> = ({ images, onStopDraging }) => {
   return (
-    <ul className="grid grid-cols-6 gap-2">
+    <ul className="grid grid-cols-12 gap-2">
       {images.map((image) => (
         <li key={image.id} draggable onDragEnd={() => onStopDraging(image.id)}>
           <TierImage image={image.src} />
