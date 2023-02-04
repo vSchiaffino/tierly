@@ -1,3 +1,4 @@
+// TODO fix confusin naming
 export interface Tier {
   title: string
   imageUrl: string
@@ -6,4 +7,12 @@ export interface Tier {
 
 export interface TierDetail extends Tier {
   description: string
+  categories: Category[]
+  // TODO must not be optional
+  images?: string[]
+}
+
+export interface Category {
+  title: string
+  color: string
 }
