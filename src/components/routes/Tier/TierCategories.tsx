@@ -40,9 +40,7 @@ export const TierCategories: React.FC<Props> = () => {
   const onDeleteEditingCategory = () => {
     if (!editingCategory) return
     setEditingCategory(null)
-    setCategories(
-      categories.filter((category) => editingCategory.id !== category.id)
-    )
+    setCategories(categories.filter((c) => editingCategory.id !== c.id))
   }
 
   const onCategoryMove = (id: number, direction: 'up' | 'down') => {
@@ -72,16 +70,13 @@ export const TierCategories: React.FC<Props> = () => {
 
   const onUpdateEditingCategory = (color: string, title: string) => {
     if (!editingCategory) return
-    let newCategories = [...categories]
-    let edited = newCategories.find(
-      (category) => category.id === editingCategory.id
+    setCategories(
+      categories.map((category) =>
+        category.id === editingCategory.id
+          ? { ...editingCategory, color, title }
+          : category
+      )
     )
-    if (!edited) return
-
-    edited.color = color
-    edited.title = title
-
-    setCategories(newCategories)
   }
 
   return (
