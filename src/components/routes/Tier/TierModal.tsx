@@ -65,10 +65,16 @@ export const TierModal: React.FC<Props> = ({
             ))}
           </div>
         </div>
-        <div>
+        <div className="flex flex-row gap-10 justify-center">
+          <button
+            className="w-40 py-4 bg-blue-600 hover:bg-blue-800 transition-all hover:scale-105 duration-300 text-lg text-white rounded-md mt-10"
+            onClick={() => onClose(color, title)}
+          >
+            Close
+          </button>
           <button
             onClick={onDelete}
-            className="bg-red-600 hover:bg-red-800 transition-all hover:scale-105 duration-300 text-lg text-white p-4 rounded-md mt-10"
+            className="w-40 py-4 bg-red-600 hover:bg-red-800 transition-all hover:scale-105 duration-300 text-lg text-white rounded-md mt-10"
           >
             Delete category
           </button>
