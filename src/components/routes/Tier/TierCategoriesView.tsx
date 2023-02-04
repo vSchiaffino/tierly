@@ -1,17 +1,15 @@
 import React from 'react'
 import { Card } from '../../Card'
-import { TierModal } from './TierModal'
 import { TierCategory } from './TierCategory'
 import TierImages from './TierImages'
 import { Category, TierImage } from '../../../types/tier'
+import TierContext from '../../../contexts/TierContext'
 
 interface Props {
   categories: Category[]
   images: TierImage[]
   onDragOver: (category: Category | null) => void
   onStopDraging: (id: number) => void
-  onModalOpen: (id: number) => void
-  onCreateCategory: () => void
   onCategoryMove: (id: number, direction: 'up' | 'down') => void
 }
 
@@ -20,10 +18,9 @@ export const TierCategoriesView: React.FC<Props> = ({
   images,
   onStopDraging,
   onDragOver,
-  onModalOpen,
-  onCreateCategory,
   onCategoryMove,
 }) => {
+  const { onCreateCategory } = React.useContext(TierContext)
   return (
     <Card className="p-10">
       <div className="mb-10 flex flex-row gap-10">
@@ -43,7 +40,6 @@ export const TierCategoriesView: React.FC<Props> = ({
           key={category.title}
           onDragOver={onDragOver}
           onMove={onCategoryMove}
-          openModal={() => onModalOpen(category.id)}
           showToDown={index !== categories.length - 1}
           showToUp={index !== 0}
         />

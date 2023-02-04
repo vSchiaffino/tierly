@@ -1,5 +1,6 @@
 import React from 'react'
 import { Category } from '../../../types/tier'
+import TierContext from '../../../contexts/TierContext'
 
 interface Props {
   category: Category
@@ -7,17 +8,16 @@ interface Props {
   showToDown: boolean
   onDragOver: (category: Category | null) => void
   onMove: (id: number, direction: 'up' | 'down') => void
-  openModal: () => void
 }
 
 export const TierCategory: React.FC<Props> = ({
   category,
   onDragOver,
   onMove,
-  openModal,
   showToDown,
   showToUp,
 }) => {
+  const { setEditingCategory } = React.useContext(TierContext)
   return (
     <div
       className={`flex flex-row min-h-[5rem] border border-gray-900`}
@@ -25,7 +25,7 @@ export const TierCategory: React.FC<Props> = ({
       onDragOver={() => onDragOver(category)}
     >
       <div
-        className={`text-center justify-center text-lg font-semibold text-slate-900  items-center flex md:w-32 w-24 bg-${category.color}`}
+        className={`text-center justify-center text-lg font-semibold text-slate-900  items-center flex md:w-32 w-24 ${category.color}`}
       >
         <p className="px-2 inline-block w-full align-middle break-words">
           {category.title}
@@ -47,7 +47,7 @@ export const TierCategory: React.FC<Props> = ({
       <div className="bg-gray-900 md:w-24 w-20 items-center flex justify-between px-2">
         <div>
           <img
-            onClick={openModal}
+            onClick={() => setEditingCategory(category)}
             className="cursor-pointer hover:bg-gray-500 rounded-full transition duration-400"
             alt="settings buton"
             src="https://tiermaker.com/images/chart/chart/settings.png"

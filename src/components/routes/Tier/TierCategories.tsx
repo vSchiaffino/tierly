@@ -1,91 +1,21 @@
 import React, { useState } from 'react'
 import { Category } from '../../../types/tier'
-import { Card } from '../../Card'
-import { TierCategory } from './TierCategory'
 import { TierModal } from './TierModal'
-import TierImages from './TierImages'
 import { TierCategoriesView } from './TierCategoriesView'
+import useImages from '../../../hooks/useImages'
+import useCategories from '../../../hooks/useCategories'
+import TierContext from '../../../contexts/TierContext'
 
 interface Props {
   categories: Category[]
 }
 
 export const TierCategories: React.FC<Props> = () => {
-  const initialValue: Category[] = [
-    {
-      id: 1,
-      title: 'Love',
-      color: 'red-500',
-      images: [],
-    },
-    {
-      id: 2,
-      title: 'Like',
-      color: 'orange-500',
-      images: [],
-    },
-    {
-      id: 3,
-      title: 'Neutral',
-      color: 'orange-200',
-      images: [],
-    },
-    {
-      id: 4,
-      title: 'Dislike',
-      color: 'yellow-500',
-      images: [],
-    },
-    {
-      id: 5,
-      title: 'Hate',
-      color: 'green-500',
-      images: [],
-    },
-  ]
-  const initialImages = [
-    {
-      id: 1,
-      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/1200px-fulhamfcshieldsvgpng',
-    },
-    {
-      id: 2,
-      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/1png',
-    },
-    {
-      id: 3,
-      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/2png',
-    },
-    {
-      id: 4,
-      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/afcbournemouth2013svgpng',
-    },
-    {
-      id: 5,
-      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/crystalpalacepng',
-    },
-    {
-      id: 6,
-      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/defdpng',
-    },
-    {
-      id: 7,
-      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/dezeeneverton-fc-new-badge1ajpg',
-    },
-    {
-      id: 8,
-      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/downloadjpg',
-    },
-    {
-      id: 9,
-      src: 'https://tiermaker.com/images/chart/chart/premier-league-clubs-22139/downloadpng',
-    },
-  ]
-  const [images, setImages] = useState(initialImages)
-  const [categories, setCategories] = useState(initialValue)
-  const [idEditing, setIdEditing] = useState<number | null>(null)
+  const [images, setImages] = useImages()
+  const [categories, setCategories] = useCategories()
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null)
   const [draggingOn, setDraggingOn] = useState<Category | null>(null)
-  const open = idEditing !== null
+
   const onStopDraging = (id: number) => {
     if (draggingOn !== null) {
       const editedCategoryIndex = categories.findIndex(
@@ -106,29 +36,13 @@ export const TierCategories: React.FC<Props> = () => {
   const onDragOver = (category: Category | null) => {
     if (draggingOn !== category) setDraggingOn(category)
   }
-  const onModalClose = (color: string, title: string) => {
-    setIdEditing(null)
-    const editedCategoryIndex = categories.findIndex(
-      (category) => category.id === idEditing
+
+  const onDeleteEditingCategory = () => {
+    if (!editingCategory) return
+    setEditingCategory(null)
+    setCategories(
+      categories.filter((category) => editingCategory.id !== category.id)
     )
-    let newCategories = [...categories]
-    newCategories[editedCategoryIndex] = {
-      color,
-      title,
-      id: idEditing || 1,
-      images: [],
-    }
-    setCategories(newCategories)
-  }
-  const onCategoryDelete = () => {
-    // Deletes the current editing category
-    const editedCategoryIndex = categories.findIndex(
-      (category) => category.id === idEditing
-    )
-    let newCategories = [...categories]
-    newCategories.splice(editedCategoryIndex, 1)
-    setIdEditing(null)
-    setCategories(newCategories)
   }
 
   const onCategoryMove = (id: number, direction: 'up' | 'down') => {
@@ -153,33 +67,41 @@ export const TierCategories: React.FC<Props> = () => {
       images: [],
     }
     setCategories([...categories, newCategory])
-    setIdEditing(newId)
+    setEditingCategory(newCategory)
   }
 
-  const onModalOpen = (id: number) => {
-    setIdEditing(id)
+  const onUpdateEditingCategory = (color: string, title: string) => {
+    if (!editingCategory) return
+    let newCategories = [...categories]
+    let edited = newCategories.find(
+      (category) => category.id === editingCategory.id
+    )
+    if (!edited) return
+
+    edited.color = color
+    edited.title = title
+
+    setCategories(newCategories)
   }
-  const selectedCategory = categories.find(
-    (category) => category.id === idEditing
-  )
+
   return (
-    <>
-      <TierModal
-        open={open}
-        onDelete={onCategoryDelete}
-        onClose={onModalClose}
-        initialColor={selectedCategory?.color || ''}
-        initialTitle={selectedCategory?.title || ''}
-      />
+    <TierContext.Provider
+      value={{
+        editingCategory,
+        onUpdateEditingCategory,
+        onDeleteEditingCategory,
+        onCreateCategory,
+        setEditingCategory,
+      }}
+    >
+      <TierModal />
       <TierCategoriesView
         categories={categories}
         images={images}
-        onCreateCategory={onCreateCategory}
-        onModalOpen={onModalOpen}
         onCategoryMove={onCategoryMove}
         onDragOver={onDragOver}
         onStopDraging={onStopDraging}
       />
-    </>
+    </TierContext.Provider>
   )
 }
