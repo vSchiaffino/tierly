@@ -8,16 +8,9 @@ import TierContext from '../../../contexts/TierContext'
 interface Props {
   categories: Category[]
   images: TierImage[]
-  onDragOver: (category: Category | null) => void
-  onStopDraging: (id: number) => void
 }
 
-export const TierCategoriesView: React.FC<Props> = ({
-  categories,
-  images,
-  onStopDraging,
-  onDragOver,
-}) => {
+export const TierCategoriesView: React.FC<Props> = ({ categories, images }) => {
   const { onCreateCategory, onCategoryMove } = React.useContext(TierContext)
   return (
     <Card className="p-10">
@@ -36,13 +29,12 @@ export const TierCategoriesView: React.FC<Props> = ({
         <TierCategory
           category={category}
           key={category.title}
-          onDragOver={onDragOver}
           onMove={onCategoryMove}
           showToDown={index !== categories.length - 1}
           showToUp={index !== 0}
         />
       ))}
-      <TierImages images={images} onStopDraging={onStopDraging} />
+      <TierImages images={images} />
     </Card>
   )
 }

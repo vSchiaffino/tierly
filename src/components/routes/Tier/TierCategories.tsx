@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Category } from '../../../types/tier'
+import { Category, TierImage } from '../../../types/tier'
 import { TierModal } from './TierModal'
 import { TierCategoriesView } from './TierCategoriesView'
 import useImages from '../../../hooks/useImages'
@@ -14,28 +14,6 @@ export const TierCategories: React.FC<Props> = () => {
   const [images, setImages] = useImages()
   const [categories, setCategories] = useCategories()
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
-  const [draggingOn, setDraggingOn] = useState<Category | null>(null)
-
-  const onStopDraging = (id: number) => {
-    if (draggingOn !== null) {
-      const editedCategoryIndex = categories.findIndex(
-        (category) => category.id === draggingOn.id
-      )
-      let newCategories = [...categories]
-      const image = images.find((image) => image.id === id)
-      if (!image) return
-      newCategories[editedCategoryIndex] = {
-        ...draggingOn,
-        images: [...draggingOn.images, image],
-      }
-      setCategories(newCategories)
-      setImages(images.filter((image) => image.id !== id))
-    }
-  }
-
-  const onDragOver = (category: Category | null) => {
-    if (draggingOn !== category) setDraggingOn(category)
-  }
 
   const onDeleteEditingCategory = () => {
     if (!editingCategory) return
@@ -78,6 +56,38 @@ export const TierCategories: React.FC<Props> = () => {
       )
     )
   }
+  const [draggedImage, setDraggedImage] = useState<TierImage | null>(null)
+  const onStartDraging = (image: TierImage) => {
+    setDraggedImage(image)
+  }
+  const onDroppedImageInCategory = (categoryAffected: Category) => {
+    if (!draggedImage) return
+    const isDuplicating = categoryAffected.images.includes(draggedImage)
+    if (isDuplicating) return
+    setCategories(
+      categories.map((category) => ({
+        ...category,
+        images:
+          category.id === categoryAffected.id
+            ? [...category.images, draggedImage]
+            : category.images.filter((image) => image.id !== draggedImage.id),
+      }))
+    )
+    setImages(images.filter((image) => image.id !== draggedImage.id))
+  }
+
+  const onDroppedImageInImages = () => {
+    if (!draggedImage) return
+    const isAlreadyInImages = images.includes(draggedImage)
+    if (isAlreadyInImages) return
+    setCategories(
+      categories.map((category) => ({
+        ...category,
+        images: category.images.filter((image) => image.id !== draggedImage.id),
+      }))
+    )
+    setImages([...images, draggedImage])
+  }
 
   return (
     <TierContext.Provider
@@ -88,15 +98,13 @@ export const TierCategories: React.FC<Props> = () => {
         onDeleteEditingCategory,
         onCreateCategory,
         setEditingCategory,
+        onStartDraging,
+        onDroppedImageInCategory,
+        onDroppedImageInImages,
       }}
     >
       <TierModal />
-      <TierCategoriesView
-        categories={categories}
-        images={images}
-        onDragOver={onDragOver}
-        onStopDraging={onStopDraging}
-      />
+      <TierCategoriesView categories={categories} images={images} />
     </TierContext.Provider>
   )
 }

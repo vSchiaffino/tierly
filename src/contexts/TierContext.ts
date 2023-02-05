@@ -1,5 +1,5 @@
 import React from 'react'
-import { Category } from '../types/tier'
+import { Category, TierImage } from '../types/tier'
 
 interface ITierContext {
   editingCategory: Category | null
@@ -8,6 +8,9 @@ interface ITierContext {
   setEditingCategory: React.Dispatch<Category | null>
   onCategoryMove: (id: number, direction: 'up' | 'down') => void
   onUpdateEditingCategory: (color: string, title: string) => void
+  onStartDraging: React.Dispatch<TierImage>
+  onDroppedImageInCategory: (categoryAffected: Category) => void
+  onDroppedImageInImages: () => void
 }
 
 const TierContext = React.createContext<ITierContext>(

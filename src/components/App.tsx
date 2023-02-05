@@ -5,7 +5,7 @@ import { AppRoutes } from './Routes'
 
 function App() {
   return (
-    <div className="bg-slate-200 h-[100vh]">
+    <div className="bg-slate-200 h-[100%]">
       <Router>
         <Nav />
         <AppRoutes />

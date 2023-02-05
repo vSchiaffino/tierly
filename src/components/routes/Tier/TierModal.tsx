@@ -27,7 +27,6 @@ export const TierModal: React.FC<Props> = () => {
   ]
 
   const open = editingCategory !== null
-  console.log(editingCategory?.color)
   return (
     <Modal
       title="Changing tier category"
