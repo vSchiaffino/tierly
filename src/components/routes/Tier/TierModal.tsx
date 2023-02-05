@@ -1,10 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Modal } from '../../Modal'
 import TierContext from '../../../contexts/TierContext'
 
 interface Props {}
 
 export const TierModal: React.FC<Props> = () => {
+  const {
+    editingCategory,
+    setEditingCategory,
+    onUpdateEditingCategory,
+    onDeleteEditingCategory,
+  } = React.useContext(TierContext)
+  useEffect(() => {
+    if (editingCategory) {
+      setState({ color: editingCategory.color, title: editingCategory.title })
+    }
+  }, [editingCategory])
+  const [state, setState] = React.useState({ color: '', title: '' })
   const colors = [
     'bg-red-500',
     'bg-blue-500',
@@ -13,15 +25,9 @@ export const TierModal: React.FC<Props> = () => {
     'bg-orange-500',
     'bg-orange-200',
   ]
-  const {
-    editingCategory,
-    setEditingCategory,
-    onUpdateEditingCategory,
-    onDeleteEditingCategory,
-  } = React.useContext(TierContext)
 
   const open = editingCategory !== null
-
+  console.log(editingCategory?.color)
   return (
     <Modal
       title="Changing tier category"
@@ -37,13 +43,14 @@ export const TierModal: React.FC<Props> = () => {
             maxLength={40}
             className="border-2 p-4 rounded-md w-[50%]"
             type="text"
-            value={editingCategory?.title || ''}
-            onChange={(e) =>
+            value={state.title}
+            onChange={(e) => {
+              setState({ ...state, title: e.target.value })
               onUpdateEditingCategory(
                 editingCategory?.color || '',
                 e.target.value
               )
-            }
+            }}
           />
         </div>
         <div>
@@ -52,11 +59,12 @@ export const TierModal: React.FC<Props> = () => {
             {colors.map((_color) => (
               <div
                 key={_color}
-                onClick={() =>
+                onClick={() => {
+                  setState({ ...state, color: _color })
                   onUpdateEditingCategory(_color, editingCategory?.title || '')
-                }
+                }}
                 className={`hover:scale-125 hover:brightness-110 transition-all duration-200 cursor-pointer w-10 h-10 ${_color} rounded-full box-border border-slate-800 ${
-                  editingCategory?.color === _color ? 'border-4' : ''
+                  state.color === _color ? 'border-4' : ''
                 }`}
               />
             ))}
