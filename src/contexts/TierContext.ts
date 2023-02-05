@@ -6,7 +6,7 @@ interface ITierContext {
   onCreateCategory: () => void
   onDeleteEditingCategory: () => void
   setEditingCategory: React.Dispatch<Category | null>
-  onCategoryMove: (id: number, direction: 'up' | 'down') => void
+  onCategoryMove: (category: Category, direction: 'up' | 'down') => void
   onUpdateEditingCategory: (color: string, title: string) => void
   onStartDraging: React.Dispatch<TierImage>
   onDroppedImageInCategory: (categoryAffected: Category) => void

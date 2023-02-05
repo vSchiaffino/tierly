@@ -21,16 +21,14 @@ export const TierCategories: React.FC<Props> = () => {
     setCategories(categories.filter((c) => editingCategory.id !== c.id))
   }
 
-  const onCategoryMove = (id: number, direction: 'up' | 'down') => {
-    const editedCategoryIndex = categories.findIndex(
-      (category) => category.id === id
-    )
-    let newCategories = [...categories]
+  const onCategoryMove = (category: Category, direction: 'up' | 'down') => {
+    const index = categories.indexOf(category)
     const modifier = direction === 'up' ? -1 : 1
-    const otherCategoryToMoveIndex = editedCategoryIndex + modifier
-    const otherCategoryToMove = newCategories[otherCategoryToMoveIndex]
-    newCategories[otherCategoryToMoveIndex] = newCategories[editedCategoryIndex]
-    newCategories[editedCategoryIndex] = otherCategoryToMove
+    const otherIndeex = index + modifier
+    let newCategories = [...categories]
+    const temp = newCategories[index]
+    newCategories[index] = newCategories[otherIndeex]
+    newCategories[otherIndeex] = temp
     setCategories(newCategories)
   }
 
@@ -64,6 +62,7 @@ export const TierCategories: React.FC<Props> = () => {
     if (!draggedImage) return
     const isDuplicating = categoryAffected.images.includes(draggedImage)
     if (isDuplicating) return
+
     setCategories(
       categories.map((category) => ({
         ...category,
@@ -77,9 +76,9 @@ export const TierCategories: React.FC<Props> = () => {
   }
 
   const onDroppedImageInImages = () => {
-    if (!draggedImage) return
-    const isAlreadyInImages = images.includes(draggedImage)
-    if (isAlreadyInImages) return
+    const isAlreadyInImages = images.includes(draggedImage as TierImage)
+    if (!draggedImage || isAlreadyInImages) return
+    
     setCategories(
       categories.map((category) => ({
         ...category,

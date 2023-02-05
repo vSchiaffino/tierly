@@ -6,7 +6,7 @@ interface Props {
   category: Category
   showToUp: boolean
   showToDown: boolean
-  onMove: (id: number, direction: 'up' | 'down') => void
+  onMove: (category: Category, direction: 'up' | 'down') => void
 }
 
 export const TierCategory: React.FC<Props> = ({
@@ -64,7 +64,7 @@ export const TierCategory: React.FC<Props> = ({
         <div>
           {showToUp && (
             <img
-              onClick={() => onMove(category.id, 'up')}
+              onClick={() => onMove(category, 'up')}
               alt="Move up"
               className="cursor-pointer hover:bg-gray-500 rounded-full transition duration-400"
               src="https://tiermaker.com/images/chart/chart/arrowup.png"
@@ -72,7 +72,7 @@ export const TierCategory: React.FC<Props> = ({
           )}
           {showToDown && (
             <img
-              onClick={() => onMove(category.id, 'down')}
+              onClick={() => onMove(category, 'down')}
               alt="Move down"
               className="cursor-pointer hover:bg-gray-500 rounded-full transition duration-400"
               src="https://tiermaker.com/images/chart/chart/arrowdown.png"
